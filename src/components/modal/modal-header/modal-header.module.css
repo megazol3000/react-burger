@@ -1,0 +1,14 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.closeIcon {
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.closeIcon:hover {
+    opacity: 0.7;
+}

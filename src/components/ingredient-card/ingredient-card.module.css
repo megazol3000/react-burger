@@ -1,0 +1,21 @@
+.IngrediendCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 208px;
+    width: calc(50% - 12px);
+    position: relative;
+    cursor: pointer;
+}
+
+.priceBlock {
+    display: flex;
+    align-items: center;
+}
+
+.nameBlock {
+    text-align: center;
+    width: 100%;
+    height: 48px;
+}
