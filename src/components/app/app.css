@@ -18,6 +18,15 @@
   width: 1240px;
 }
 
+.errorContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 div::-webkit-scrollbar {
   width: 8px;
 }

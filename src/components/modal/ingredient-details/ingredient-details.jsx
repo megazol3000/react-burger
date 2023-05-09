@@ -1,9 +1,10 @@
 import styles from './ingredient-details.module.css';
+import getIngredientPropTypes from '../../../utils/ingredient-prop-types';
 
-export default function IngredientDetails({ data }) {
+const IngredientDetails = ({ data }) => {
   return (
     <div className={styles.details}>
-        <img className={`${styles.image} mb-4`} src={data.image_large} />
+        <img className={`${styles.image} mb-4`} src={data.image_large} alt={data.name} />
         <span className="text text_type_main-medium mb-8">{data.name}</span>
         <div className={styles.energyValue}>
             <div className={styles.energyValueItem}>
@@ -25,4 +26,8 @@ export default function IngredientDetails({ data }) {
         </div>
     </div>
   )
-}
+};
+
+IngredientDetails.propTypes = getIngredientPropTypes();
+
+export default IngredientDetails;

@@ -4,8 +4,10 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import PropTypes from 'prop-types';
+import getIngredientPropTypes from '../../utils/ingredient-prop-types';
 
-export default function IngrediendCard(props) {
+const IngrediendCard = (props) => {
+
   const [modalVisible, setModalVisible] = React.useState(false);
 
   const openModal = () => {
@@ -15,7 +17,7 @@ export default function IngrediendCard(props) {
   return (
     <>
       <div className={`${styles.IngrediendCard} mb-8`} onClick={openModal}>
-          <img src={props.data.image}/>
+          <img src={props.data.image} alt={props.data.name} />
           <Counter count={1} size="default" extraClass="m-1" />
           <div className={`${styles.priceBlock} text text_type_digits-default`}>
             <span className='mr-1'>{props.data.price}</span>
@@ -25,37 +27,22 @@ export default function IngrediendCard(props) {
             {props.data.name}
           </div>
       </div>
-      <Modal 
-        isOpen={modalVisible} 
-        onClose={() => setModalVisible(false)} 
-        title="Детали ингредиента"
-        type="ingredient"
-        data={props.data}
-      />
+      {
+        modalVisible && (
+          <Modal 
+            onClose={() => setModalVisible(false)} 
+            title="Детали ингредиента"
+            type="ingredient"
+            data={props.data}
+          />
+        )
+      }
     </>
   )
-}
+};
 
 IngrediendCard.propTypes = {
-  count: PropTypes.number,
-  size: PropTypes.string,
-  extraClass: PropTypes.string,
-  type: PropTypes.string,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  title: PropTypes.string,
-  data: PropTypes.shape({
-    calories: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    fat: PropTypes.number,
-    image: PropTypes.string,
-    image_large: PropTypes.string,
-    image_mobile: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
-    proteins: PropTypes.number,
-    type: PropTypes.string,
-    __v: PropTypes.number,
-    _id: PropTypes.string
-  })
+  data: PropTypes.shape(getIngredientPropTypes())
 };
+
+export default IngrediendCard;

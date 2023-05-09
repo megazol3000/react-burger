@@ -1,18 +1,19 @@
 import React from 'react'
 import styles from './burger-constructor.module.css';
+import Modal from '../modal/modal';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CurrencyIcon  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { DragIcon  } from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../modal/modal';
 import PropTypes from 'prop-types';
+import getIngredientPropTypes from '../../utils/ingredient-prop-types';
 
-export default function BurgerConstructor(props) {
+const BurgerConstructor = (props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-
   const openModal = () => {
     setModalVisible(true);
   };
+  
   return (
     <div className={`${styles.BurgerConstructorContainer} pt-15`}>
       <div className={`${styles.constructorIngredients}`}>
@@ -26,54 +27,22 @@ export default function BurgerConstructor(props) {
           />
         </div>
         <div className={`${styles.scrollContainer} pr-4 pl-4`}>
-          <div className={styles.dragWrapper}>
-            <DragIcon />
-            <ConstructorElement
-              text="Соус традиционный галактический"
-              price={15}
-              thumbnail={"https://code.s3.yandex.net/react/code/sauce-03.png"}
-            />
-          </div>
-          <div className={styles.dragWrapper}>
-            <DragIcon />
-            <ConstructorElement
-              text="Мясо бессмертных моллюсков Protostomia"
-              price={1337}
-              thumbnail={"https://code.s3.yandex.net/react/code/meat-02.png"}
-            />
-          </div>
-          <div className={styles.dragWrapper}>
-            <DragIcon />
-            <ConstructorElement
-              text="Плоды Фалленианского дерева"
-              price={874}
-              thumbnail={"https://code.s3.yandex.net/react/code/sp_1.png"}
-            />
-          </div>
-          <div className={styles.dragWrapper}>
-            <DragIcon />
-            <ConstructorElement
-              text="Хрустящие минеральные кольца"
-              price={300}
-              thumbnail={"https://code.s3.yandex.net/react/code/mineral_rings.png"}
-            />
-          </div>
-          <div className={styles.dragWrapper}>
-            <DragIcon />
-            <ConstructorElement
-              text="Говяжий метеорит (отбивная)"
-              price={3000}
-              thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-            />
-          </div>
-          <div className={styles.dragWrapper}>
-            <DragIcon />
-            <ConstructorElement
-              text="Сыр с астероидной плесенью"
-              price={4142}
-              thumbnail={"https://code.s3.yandex.net/react/code/cheese.png"}
-            />
-          </div>
+          {
+            props.ingredients.map((item) => {
+              if (item.type === 'main' || item.type === 'sauce') {
+                return (
+                  <div key={item._id} className={styles.dragWrapper}>
+                    <DragIcon />
+                    <ConstructorElement
+                      text={item.name}
+                      price={item.price}
+                      thumbnail={item.image}
+                    />
+                  </div>
+                )
+              }
+            })
+          }
         </div>
         <div className='pr-4'>
           <ConstructorElement
@@ -92,26 +61,23 @@ export default function BurgerConstructor(props) {
         </div>
         <Button htmlType="button" type="primary" size="large" onClick={openModal}>Оформить заказ</Button>
       </div>
-      <Modal 
-        isOpen={modalVisible} 
-        onClose={() => setModalVisible(false)} 
-        title=""
-        type="order"
-      />
+      {
+        modalVisible && (
+          <Modal 
+            onClose={() => setModalVisible(false)} 
+            title=""
+            type="order"
+          />
+        )
+      }
     </div>
   )
-}
+};
 
 BurgerConstructor.propTypes = {
-  type: PropTypes.string,
-  isLocked: PropTypes.bool,
-  text: PropTypes.string,
-  price: PropTypes.number,
-  thumbnail: PropTypes.string,
-  htmlType: PropTypes.string,
-  size: PropTypes.string,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  title: PropTypes.string,
-  type: PropTypes.string,
+  ingredients: PropTypes.arrayOf(
+    PropTypes.shape(getIngredientPropTypes()).isRequired
+  ).isRequired
 };
+
+export default BurgerConstructor;
