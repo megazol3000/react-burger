@@ -1,0 +1,17 @@
+.BurgerIngredientsContainer {
+    width: calc(50% - 20px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.BurgerIngredientsBlock {
+    flex-grow: 1;
+    overflow: overlay;
+}
+
+.BurgerIngredientsTypeWrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

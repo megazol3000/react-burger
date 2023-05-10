@@ -1,0 +1,44 @@
+.BurgerConstructorContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: calc(50% - 20px);
+    height: 100%;
+}
+
+.scrollContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    gap: 16px;
+    max-height: 464px;
+    overflow: overlay;
+}
+
+.constructorIngredients {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.orderBlock, 
+.orderBlockSum {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.dragWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media screen and (max-height: 968px) {
+    .scrollContainer {
+        max-height: 368px;
+    }
+}
