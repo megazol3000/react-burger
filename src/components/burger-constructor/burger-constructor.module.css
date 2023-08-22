@@ -6,6 +6,10 @@
     height: 100%;
 }
 
+.bunElement {
+    min-width: 552px;
+}
+
 .scrollContainer {
     display: flex;
     flex-direction: column;
@@ -14,6 +18,7 @@
     gap: 16px;
     max-height: 464px;
     overflow: overlay;
+    scrollbar-gutter: stable;
 }
 
 .constructorIngredients {
@@ -23,18 +28,8 @@
     align-items: flex-end;
 }
 
-.orderBlock, 
-.orderBlockSum {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.dragWrapper {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.onHover {
+    filter: brightness(1.1);
 }
 
 @media screen and (max-height: 968px) {

@@ -1,38 +1,36 @@
-import React from 'react';
-import './app.css';
-import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import getIngredients from '../../utils/burger-api';
+import "./app.css";
+import AppHeader from "../app-header/app-header";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
+import { useSelector } from "react-redux";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const App = () => {
-  const [ingredients, setIngredients] = React.useState([]);
-  const [error, setError] = React.useState('');
-  
-  React.useEffect(() => {
-    getIngredients()
-    .then((json) => {
-      setIngredients(json.data);
-    })
-    .catch(error => {
-      setError({ errorMessage: error });
-    });
-  }, []);
+  const error = useSelector((state) => state.allIngredients.error);
 
   return (
     <div className="App">
-      {error ? (<div className='errorContainer text text_type_main-large'>Что-то пошло не так 😨<br/>попробуйте перезагрузить страницу</div>) : (
+      {error ? (
+        <div className="errorContainer text text_type_main-large">
+          Что-то пошло не так 😨
+          <br />
+          попробуйте перезагрузить страницу
+        </div>
+      ) : (
         <>
-        <AppHeader />
+          <AppHeader />
           <div className="bodyContainer pt-10 pb-10">
-            <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor ingredients={ingredients} />
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </DndProvider>
           </div>
-          <div id='react-modals'></div>
+          <div id="react-modals"></div>
         </>
       )}
     </div>
   );
-}
+};
 
 export default App;
