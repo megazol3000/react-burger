@@ -8,6 +8,7 @@ import {
 import OrderBlock from "../order-block/order-block";
 import { useDrop } from "react-dnd";
 import { ConstructorDragElement } from "./constructor-drag-element";
+import { useMemo } from "react";
 
 const BurgerConstructor = () => {
   const allIngredients = useSelector(
@@ -24,7 +25,10 @@ const BurgerConstructor = () => {
 
   const dispatch = useDispatch();
 
-  const bun = allIngredients.find((item) => item._id === constructorBunId);
+  const bun = useMemo(
+    () => allIngredients.find((item) => item._id === constructorBunId),
+    [constructorBunId]
+  );
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
@@ -45,6 +49,16 @@ const BurgerConstructor = () => {
 
   const className = isHover ? styles.onHover : "";
 
+  const scrollIngredients = useMemo(() => {
+    if (allIngredients.length) {
+      const acc = [];
+      constructorIngredientsIds.forEach((id) => {
+        acc.push(allIngredients.find((item) => item._id === id));
+      });
+      return acc;
+    }
+  }, [constructorIngredientsIds, allIngredients]);
+
   return (
     <div className={`${styles.BurgerConstructorContainer} pt-15`}>
       <div
@@ -55,37 +69,31 @@ const BurgerConstructor = () => {
           {bun && (
             <ConstructorElement
               type="top"
-              isLocked={true}
               text={bun.name}
               price={bun.price}
               thumbnail={bun.image}
+              isLocked
             />
           )}
         </div>
         <div className={`${styles.scrollContainer} pr-2 pl-4`}>
-          {constructorIngredientsIds.map((currItem, idx) => {
-            const objItem = allIngredients.find(
-              (item) => item._id === currItem
-            );
-            if (objItem && objItem.type != "bun") {
-              return (
-                <ConstructorDragElement
-                  objItem={objItem}
-                  idx={idx}
-                  key={idx + "_" + currItem}
-                />
-              );
-            }
-          })}
+          {scrollIngredients &&
+            scrollIngredients.map((item, idx) => (
+              <ConstructorDragElement
+                objItem={item}
+                idx={idx}
+                key={idx + "_" + item._id}
+              />
+            ))}
         </div>
         <div className={`${styles.bunElement} pr-4`}>
           {bun && (
             <ConstructorElement
               type="bottom"
-              isLocked={true}
               text={bun.name}
               price={bun.price}
               thumbnail={bun.image}
+              isLocked
             />
           )}
         </div>

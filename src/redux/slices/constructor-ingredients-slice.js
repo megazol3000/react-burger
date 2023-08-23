@@ -33,7 +33,7 @@ export const constructorIngredientsSlice = createSlice({
 
       sortedArr.splice(dragIdx, 1);
       sortedArr.splice(hoverIdx, 0, ingredients);
-
+      
       state.ingredients = sortedArr;
     },
   },

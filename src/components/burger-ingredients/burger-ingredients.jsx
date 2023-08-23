@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngrediendCard from "../ingredient-card/ingredient-card";
@@ -64,6 +64,15 @@ const BurgerIngredients = () => {
     };
   }
 
+  const ingredientFilter = (type) =>
+    allIngredients.filter((item) => item.type == type);
+
+  const bunFilter = useMemo(() => ingredientFilter("bun"), [allIngredients]);
+
+  const sauceFilter = useMemo(() => ingredientFilter("sauce"), [allIngredients]);
+
+  const mainFilter = useMemo(() => ingredientFilter("main"), [allIngredients]);
+
   return (
     <div className={styles.BurgerIngredientsContainer}>
       <h1 className="text text_type_main-large mb-5">Соберите бургер</h1>
@@ -98,36 +107,27 @@ const BurgerIngredients = () => {
           className={`${styles.BurgerIngredientsTypeWrap} pr-4 pl-4`}
           id="bunsBlock"
         >
-          {allIngredients.map(
-            (item) =>
-              item.type === "bun" && (
-                <IngrediendCard data={item} key={item._id} />
-              )
-          )}
+          {bunFilter.map((item) => (
+            <IngrediendCard data={item} key={item._id} />
+          ))}
         </div>
         <h2 className="text text_type_main-medium mb-6 mt-2">Соусы</h2>
         <div
           className={`${styles.BurgerIngredientsTypeWrap} pr-4 pl-4`}
           id="sausesBlock"
         >
-          {allIngredients.map(
-            (item) =>
-              item.type === "sauce" && (
-                <IngrediendCard data={item} key={item._id} />
-              )
-          )}
+          {sauceFilter.map((item) => (
+            <IngrediendCard data={item} key={item._id} />
+          ))}
         </div>
         <h2 className="text text_type_main-medium mb-6 mt-2">Начинки</h2>
         <div
           className={`${styles.BurgerIngredientsTypeWrap} pr-4 pl-4`}
           id="ingredientsBlock"
         >
-          {allIngredients.map(
-            (item) =>
-              item.type === "main" && (
-                <IngrediendCard data={item} key={item._id} />
-              )
-          )}
+          {mainFilter.map((item) => (
+            <IngrediendCard data={item} key={item._id} />
+          ))}
         </div>
       </div>
     </div>

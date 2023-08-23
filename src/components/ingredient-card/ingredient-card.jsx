@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./ingredient-card.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -21,11 +21,13 @@ const IngrediendCard = (props) => {
 
   const dispatch = useDispatch();
 
-  let count = 0;
-
-  constructorIngredientsIds.forEach((item) => {
-    if (props.data._id === item) count++;
-  });
+  let count = useMemo(() => {
+    let acc = 0;
+    constructorIngredientsIds.forEach((item) => {
+      acc += props.data._id === item ? 1 : 0;
+    });
+    return acc;
+  }, [constructorIngredientsIds]);
 
   count = props.data._id === constructorBunId ? 1 : count;
 
@@ -36,12 +38,9 @@ const IngrediendCard = (props) => {
 
   const id = props.data._id;
 
-  const [, /* { isDrag } */ dragRef] = useDrag({
+  const [, dragRef] = useDrag({
     type: "ingredient",
     item: { id },
-    /* collect: (monitor) => ({
-      isDrag: monitor.isDragging(),
-    }), */
   });
 
   return (
