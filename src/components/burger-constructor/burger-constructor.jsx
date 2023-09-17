@@ -1,83 +1,106 @@
-import React from 'react'
-import styles from './burger-constructor.module.css';
-import Modal from '../modal/modal';
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { CurrencyIcon  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { DragIcon  } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import getIngredientPropTypes from '../../utils/ingredient-prop-types';
+import styles from "./burger-constructor.module.css";
+import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addIngredient,
+  addBun,
+} from "../../redux/slices/constructor-ingredients-slice";
+import OrderBlock from "../order-block/order-block";
+import { useDrop } from "react-dnd";
+import { ConstructorDragElement } from "./constructor-drag-element";
+import { useMemo } from "react";
 
-const BurgerConstructor = (props) => {
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  
+const BurgerConstructor = () => {
+  const allIngredients = useSelector(
+    (state) => state.allIngredients.ingredients
+  );
+
+  const constructorBunId = useSelector(
+    (state) => state.constructorIngredients.bun
+  );
+
+  const constructorIngredientsIds = useSelector(
+    (state) => state.constructorIngredients.ingredients
+  );
+
+  const dispatch = useDispatch();
+
+  const bun = useMemo(
+    () => allIngredients.find((item) => item._id === constructorBunId),
+    [constructorBunId]
+  );
+
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(ingredient) {
+      const objIngredient = allIngredients.find(
+        (item) => item._id === ingredient.id
+      );
+      if (objIngredient && objIngredient.type === "bun") {
+        dispatch(addBun(ingredient));
+      } else {
+        dispatch(addIngredient(ingredient));
+      }
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
+
+  const className = isHover ? styles.onHover : "";
+
+  const scrollIngredients = useMemo(() => {
+    if (allIngredients.length) {
+      const acc = [];
+      constructorIngredientsIds.forEach((id) => {
+        acc.push(allIngredients.find((item) => item._id === id));
+      });
+      return acc;
+    }
+  }, [constructorIngredientsIds, allIngredients]);
+
   return (
     <div className={`${styles.BurgerConstructorContainer} pt-15`}>
-      <div className={`${styles.constructorIngredients}`}>
-        <div className='pr-4'>
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text="Краторная булка N-200i (верх)"
-            price={200}
-            thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-          />
+      <div
+        ref={dropTarget}
+        className={`${styles.constructorIngredients} ${className}`}
+      >
+        <div className={`${styles.bunElement} pr-4`}>
+          {bun && (
+            <ConstructorElement
+              type="top"
+              text={bun.name}
+              price={bun.price}
+              thumbnail={bun.image}
+              isLocked
+            />
+          )}
         </div>
-        <div className={`${styles.scrollContainer} pr-4 pl-4`}>
-          {
-            props.ingredients.map((item) => {
-              if (item.type === 'main' || item.type === 'sauce') {
-                return (
-                  <div key={item._id} className={styles.dragWrapper}>
-                    <DragIcon />
-                    <ConstructorElement
-                      text={item.name}
-                      price={item.price}
-                      thumbnail={item.image}
-                    />
-                  </div>
-                )
-              }
-            })
-          }
+        <div className={`${styles.scrollContainer} pr-2 pl-4`}>
+          {scrollIngredients &&
+            scrollIngredients.map((item, idx) => (
+              <ConstructorDragElement
+                objItem={item}
+                idx={idx}
+                key={idx + "_" + item._id}
+              />
+            ))}
         </div>
-        <div className='pr-4'>
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text="Краторная булка N-200i (низ)"
-            price={200}
-            thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-          />
+        <div className={`${styles.bunElement} pr-4`}>
+          {bun && (
+            <ConstructorElement
+              type="bottom"
+              text={bun.name}
+              price={bun.price}
+              thumbnail={bun.image}
+              isLocked
+            />
+          )}
         </div>
       </div>
-      <div className={styles.orderBlock}>
-        <div className={`${styles.orderBlockSum} mr-10`}>
-          <span className="text text_type_digits-medium mr-2">10068</span>
-          <CurrencyIcon type="primary" />
-        </div>
-        <Button htmlType="button" type="primary" size="large" onClick={openModal}>Оформить заказ</Button>
-      </div>
-      {
-        modalVisible && (
-          <Modal 
-            onClose={() => setModalVisible(false)} 
-            title=""
-            type="order"
-          />
-        )
-      }
+      <OrderBlock />
     </div>
-  )
-};
-
-BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(
-    PropTypes.shape(getIngredientPropTypes()).isRequired
-  ).isRequired
+  );
 };
 
 export default BurgerConstructor;
