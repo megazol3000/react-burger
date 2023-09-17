@@ -27,7 +27,7 @@ const BurgerConstructor = () => {
 
   const bun = useMemo(
     () => allIngredients.find((item) => item._id === constructorBunId),
-    [constructorBunId]
+    [allIngredients, constructorBunId]
   );
 
   const [{ isHover }, dropTarget] = useDrop({

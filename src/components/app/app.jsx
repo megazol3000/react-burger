@@ -1,10 +1,14 @@
 import "./app.css";
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useSelector } from "react-redux";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "../../pages/home";
+import Login from "../../pages/login";
+import Registration from "../../pages/registration";
+import PasswordRecovery from "../../pages/password-recovery";
+import PasswordReset from "../../pages/password-reset";
+import Profile from "../../pages/profile";
+import { ProtectedRouteElement } from "../protected-route/protected-route";
 
 const App = () => {
   const error = useSelector((state) => state.allIngredients.error);
@@ -19,13 +23,21 @@ const App = () => {
         </div>
       ) : (
         <>
-          <AppHeader />
-          <div className="bodyContainer pt-10 pb-10">
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </DndProvider>
-          </div>
+          <Router>
+            <AppHeader />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/login"
+                element={<ProtectedRouteElement element={<Login />} />}
+              />
+              <Route path="/register" element={<Registration />} />
+              <Route path="/forgot-password" element={<PasswordRecovery />} />
+              <Route path="/reset-password" element={<PasswordReset />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/orders" element={<Profile />} />
+            </Routes>
+          </Router>
           <div id="react-modals"></div>
         </>
       )}

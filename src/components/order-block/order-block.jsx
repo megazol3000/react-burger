@@ -39,7 +39,7 @@ const OrderBlock = () => {
       });
       return price;
     }
-  }, [constructorIngredientsIds, constructorBunId]);
+  }, [allIngredients, constructorIngredientsIds, constructorBunId]);
 
   const setOrderDetails = (data) => {
     dispatch(setOrderName(data.name));
@@ -65,7 +65,6 @@ const OrderBlock = () => {
           <CurrencyIcon type="primary" />
         </div>
         <Button
-          htmlType="button"
           type="primary"
           size="large"
           onClick={openModal}
