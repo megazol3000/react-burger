@@ -113,7 +113,9 @@ const Profile = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <PasswordInput extraClass="mb-6" />
-          <Button onClick={saveClick}>Сохранить</Button>
+          <Button onClick={saveClick} htmlType="button">
+            Сохранить
+          </Button>
         </div>
       ) : (
         <div>

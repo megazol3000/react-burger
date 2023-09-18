@@ -68,6 +68,7 @@ const OrderBlock = () => {
           type="primary"
           size="large"
           onClick={openModal}
+          htmlType="button"
         >
           Оформить заказ
         </Button>

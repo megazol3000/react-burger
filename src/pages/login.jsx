@@ -44,7 +44,7 @@ const Login = () => {
         extraClass="mb-6"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button extraClass="mb-20" onClick={handleClick}>
+      <Button extraClass="mb-20" onClick={handleClick} htmlType="button">
         Войти
       </Button>
       <p

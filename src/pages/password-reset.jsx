@@ -40,7 +40,7 @@ const PasswordReset = () => {
         onChange={tokenChange}
         extraClass="mb-6"
       />
-      <Button extraClass="mb-20" onClick={handleClick}>
+      <Button extraClass="mb-20" onClick={handleClick} htmlType="button">
         Сохранить
       </Button>
       <p

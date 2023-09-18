@@ -37,7 +37,7 @@ const PasswordRecovery = () => {
         size={"default"}
         extraClass="mb-6"
       />
-      <Button extraClass="mb-20" onClick={handleClick}>
+      <Button extraClass="mb-20" onClick={handleClick} htmlType="button">
         Восстановить
       </Button>
       <p
