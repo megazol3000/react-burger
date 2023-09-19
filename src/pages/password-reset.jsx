@@ -1,16 +1,19 @@
 import "../components/app/app.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Input,
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { resetPassword } from "../utils/burger-api";
 
 const PasswordReset = () => {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
+  const [requestState, setRequestState] = useState("");
+
+  const navigate = useNavigate();
 
   const passwordChange = (e) => {
     setPassword(e.target.value);
@@ -21,8 +24,15 @@ const PasswordReset = () => {
   };
 
   const handleClick = () => {
-    resetPassword(password, token);
+    resetPassword(password, token, setRequestState);
   };
+
+  useEffect(() => {
+    if (requestState === "ok") {
+      localStorage.removeItem("resetPasswordAccess");
+      return navigate("/login");
+    }
+  }, [requestState]);
 
   return (
     <div className="bodyContainerCenter pt-10 pb-10">

@@ -20,8 +20,10 @@ const PasswordRecovery = () => {
     recoverPassword(emailValue, setRequestState);
   };
 
+  localStorage.removeItem("resetPasswordAccess");
   useEffect(() => {
     if (requestState === "ok") {
+      localStorage.setItem("resetPasswordAccess", true);
       return navigate("/reset-password");
     }
   }, [requestState]);

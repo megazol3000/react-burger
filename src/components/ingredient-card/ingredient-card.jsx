@@ -14,10 +14,6 @@ import { useDrag } from "react-dnd/dist/hooks";
 import { Link, useLocation } from "react-router-dom";
 
 const IngrediendCard = (props) => {
-  const modalVisible = useSelector(
-    (state) => state.currentIngredient.modalVisible
-  );
-
   const constructorBunId = useSelector(
     (state) => state.constructorIngredients.bun
   );
@@ -56,9 +52,11 @@ const IngrediendCard = (props) => {
         display: "contents",
         color: "inherit",
       }}
+      key={id}
       to={{
         pathname: `/${id}`,
       }}
+      state={{ cardClick: location }}
     >
       <div
         ref={dragRef}
@@ -75,13 +73,6 @@ const IngrediendCard = (props) => {
           {props.data.name}
         </div>
       </div>
-      {/* {modalVisible && (
-        <Modal
-          onClose={() => dispatch(setModalVisible(false))}
-          title="Детали ингредиента"
-          type="ingredient"
-        />
-      )} */}
     </Link>
   );
 };

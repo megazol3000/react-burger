@@ -6,9 +6,11 @@ import styles from "./order-block.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getOrder } from "../../utils/burger-api";
 import { setOrderName, setOrderNumber } from "../../redux/slices/order-slice";
+import { useNavigate } from "react-router-dom";
 
 const OrderBlock = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
+  const navigate = useNavigate();
 
   const allIngredients = useSelector(
     (state) => state.allIngredients.ingredients
@@ -47,12 +49,16 @@ const OrderBlock = () => {
   };
 
   const openModal = () => {
-    getOrder(
-      constructorBunId,
-      constructorIngredientsIds,
-      setOrderDetails,
-      setModalVisible
-    );
+    if (localStorage.getItem("accessToken")) {
+      getOrder(
+        constructorBunId,
+        constructorIngredientsIds,
+        setOrderDetails,
+        setModalVisible
+      );
+    } else {
+      navigate("/login");
+    }
   };
 
   return (

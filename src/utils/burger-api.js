@@ -152,7 +152,7 @@ export const recoverPassword = (email, setRequestState) => {
         ;
 };
 
-export const resetPassword = (password, token) => {
+export const resetPassword = (password, token, setRequestState) => {
     return fetch(
         `${NORMA_API}/password-reset/reset`,
         {
@@ -167,6 +167,7 @@ export const resetPassword = (password, token) => {
         })
         .then((response) => {
             if (response.ok) {
+                setRequestState('ok');
                 return response.json();
             }
         })
@@ -195,7 +196,6 @@ export const refreshToken = () => {
 
 export async function fetchWithRefresh(url, options, setResponse) {
     try {
-        console.log('try');
         const res = await fetch(`${NORMA_API}${url}`, options);
         return await checkResponse(res).then((data) => {
             if (data) {
