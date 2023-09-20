@@ -6,7 +6,6 @@ import {
   Route,
   useNavigate,
   useLocation,
-  useParams,
 } from "react-router-dom";
 import Home from "../../pages/home";
 import Login from "../../pages/login";
@@ -14,7 +13,7 @@ import Registration from "../../pages/registration";
 import PasswordRecovery from "../../pages/password-recovery";
 import PasswordReset from "../../pages/password-reset";
 import Profile from "../../pages/profile";
-import { ProtectedRouteElement } from "../protected-route/protected-route";
+import ProtectedRoute from "../protected-route/protected-route";
 import Modal from "../modal/modal";
 import IngredientDetails from "../modal/ingredient-details/ingredient-details";
 import { setModalVisible } from "../../redux/slices/current-ingredient-slice";
@@ -24,9 +23,11 @@ import {
   setError,
   setIngredients,
 } from "../../redux/slices/all-ingredients-slice";
+import Preloader from "../../utils/preloader/preloader";
 
 const App = () => {
   const error = useSelector((state) => state.allIngredients.error);
+  const loading = useSelector((state) => state.preloader.loading);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,32 +55,46 @@ const App = () => {
         </div>
       ) : (
         <>
+          {loading && <Preloader />}
           <AppHeader />
           <Routes location={cardClick || location}>
             <Route path="/" element={<Home />} />
             <Route
               path="/login"
-              element={<ProtectedRouteElement element={<Login />} />}
+              element={<ProtectedRoute element={<Login />} anonymous={true} />}
             />
             <Route
               path="/register"
-              element={<ProtectedRouteElement element={<Registration />} />}
+              element={
+                <ProtectedRoute element={<Registration />} anonymous={true} />
+              }
             />
             <Route
               path="/forgot-password"
-              element={<ProtectedRouteElement element={<PasswordRecovery />} />}
+              element={
+                <ProtectedRoute
+                  element={<PasswordRecovery />}
+                  anonymous={true}
+                />
+              }
             />
             <Route
               path="/reset-password"
-              element={<ProtectedRouteElement element={<PasswordReset />} />}
+              element={
+                <ProtectedRoute element={<PasswordReset />} anonymous={true} />
+              }
             />
             <Route
               path="/profile"
-              element={<ProtectedRouteElement element={<Profile />} />}
+              element={
+                <ProtectedRoute element={<Profile />} anonymous={false} />
+              }
             />
             <Route
               path="/profile/orders"
-              element={<ProtectedRouteElement element={<Profile />} />}
+              element={
+                <ProtectedRoute element={<Profile />} anonymous={false} />
+              }
             />
             <Route path="/:id" element={<IngredientDetails />} />
           </Routes>
@@ -95,6 +110,7 @@ const App = () => {
                     }}
                     title="Детали ингредиента"
                     type="ingredient"
+                    child={<IngredientDetails />}
                   />
                 }
               />

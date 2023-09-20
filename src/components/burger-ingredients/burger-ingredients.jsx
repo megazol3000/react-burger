@@ -63,7 +63,7 @@ const BurgerIngredients = () => {
   return (
     <div className={styles.BurgerIngredientsContainer}>
       <h1 className="text text_type_main-large mb-5">Соберите бургер</h1>
-      <div style={{ display: "flex" }} className="mb-10">
+      <div className={`${styles.BurgerIngredientsTabs} mb-10`}>
         <Tab
           value="one"
           active={current === "one"}

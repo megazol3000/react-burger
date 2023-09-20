@@ -1,12 +1,16 @@
+import { checkResponse } from "./commonFunctions";
 const NORMA_API = 'https://norma.nomoreparties.space/api';
 
+function request(url, options) {
+    return fetch(url, options).then(checkResponse);
+}
+
 export const getIngredients = () => {
-    return fetch(`${NORMA_API}/ingredients`)
-        .then((response) => response.ok ? response.json() : response.json().then((err) => Promise.reject(err)));
+    return request(`${NORMA_API}/ingredients`);
 };
 
-export const getOrder = (burgerBun, ingredients, setOrderDetails, setModalVisible) => {
-    return fetch(
+export const getOrder = (burgerBun, ingredients, setOrderDetails, setModalVisible, hidePreloader, removeIngredients) => {
+    return request(
         `${NORMA_API}/orders`,
         {
             method: "POST",
@@ -21,24 +25,19 @@ export const getOrder = (burgerBun, ingredients, setOrderDetails, setModalVisibl
                 ]
             })
         })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            return Promise.reject(`Ошибка при попытке сделать заказ ${response.status}`);
-        })
         .then((data) => {
             setOrderDetails(data);
             setModalVisible(true);
         })
+        .then(removeIngredients)
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
-        })
-        ;
+        }).finally(hidePreloader);
+    ;
 };
 
-export const registartion = (name, email, password, setRequestState) => {
-    return fetch(
+export const registartion = (name, email, password, setRequestState, hidePreloader) => {
+    return request(
         `${NORMA_API}/auth/register`,
         {
             method: "POST",
@@ -51,11 +50,6 @@ export const registartion = (name, email, password, setRequestState) => {
                 "password": password,
             })
         })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        })
         .then((data) => {
             if (data) {
                 setRequestState('ok');
@@ -63,12 +57,11 @@ export const registartion = (name, email, password, setRequestState) => {
         })
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
-        })
-        ;
+        }).finally(hidePreloader);
 };
 
-export const login = (email, password, setRequestState) => {
-    return fetch(
+export const login = (email, password, setRequestState, hidePreloader) => {
+    return request(
         `${NORMA_API}/auth/login`,
         {
             method: "POST",
@@ -80,11 +73,6 @@ export const login = (email, password, setRequestState) => {
                 "password": password,
             })
         })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        })
         .then((data) => {
             if (data) {
                 localStorage.setItem('accessToken', data.accessToken);
@@ -94,12 +82,11 @@ export const login = (email, password, setRequestState) => {
         })
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
-        })
-        ;
+        }).finally(hidePreloader);
 };
 
-export const logout = (setLogoutState) => {
-    return fetch(
+export const logout = (setLogoutState, hidePreloader) => {
+    return request(
         `${NORMA_API}/auth/logout`,
         {
             method: "POST",
@@ -110,11 +97,6 @@ export const logout = (setLogoutState) => {
                 "token": localStorage.getItem('refreshToken')
             })
         })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        })
         .then((data) => {
             if (data) {
                 localStorage.removeItem('accessToken');
@@ -124,12 +106,11 @@ export const logout = (setLogoutState) => {
         })
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
-        })
-        ;
+        }).finally(hidePreloader);
 };
 
-export const recoverPassword = (email, setRequestState) => {
-    return fetch(
+export const recoverPassword = (email, setRequestState, hidePreloader) => {
+    return request(
         `${NORMA_API}/password-reset`,
         {
             method: "POST",
@@ -140,20 +121,14 @@ export const recoverPassword = (email, setRequestState) => {
                 "email": email
             })
         })
-        .then((response) => {
-            if (response.ok) {
-                setRequestState('ok');
-                return response.json();
-            }
-        })
+        .then(() => setRequestState('ok'))
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
-        })
-        ;
+        }).finally(hidePreloader);
 };
 
-export const resetPassword = (password, token, setRequestState) => {
-    return fetch(
+export const resetPassword = (password, token, setRequestState, hidePreloader) => {
+    return request(
         `${NORMA_API}/password-reset/reset`,
         {
             method: "POST",
@@ -165,24 +140,14 @@ export const resetPassword = (password, token, setRequestState) => {
                 "token": token,
             })
         })
-        .then((response) => {
-            if (response.ok) {
-                setRequestState('ok');
-                return response.json();
-            }
-        })
+        .then(() => setRequestState('ok'))
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
-        })
-        ;
-};
-
-const checkResponse = (res) => {
-    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+        }).finally(hidePreloader);
 };
 
 export const refreshToken = () => {
-    return fetch(
+    return request(
         `${NORMA_API}/auth/token`, {
         method: "POST",
         headers: {
@@ -191,17 +156,17 @@ export const refreshToken = () => {
         body: JSON.stringify({
             "token": localStorage.getItem('refreshToken'),
         }),
-    }).then(checkResponse);
+    });
 };
 
-export async function fetchWithRefresh(url, options, setResponse) {
+export async function fetchWithRefresh(url, options, setResponse, hidePreloader) {
     try {
         const res = await fetch(`${NORMA_API}${url}`, options);
         return await checkResponse(res).then((data) => {
             if (data) {
                 setResponse(data);
             }
-        });
+        }).finally(hidePreloader);
     } catch (err) {
         if (err.message === "jwt expired") {
             const refreshData = await refreshToken();
@@ -212,8 +177,10 @@ export async function fetchWithRefresh(url, options, setResponse) {
             localStorage.setItem("accessToken", refreshData.accessToken);
             options.headers.authorization = refreshData.accessToken;
             const res = await fetch(`${NORMA_API}${url}`, options);
+            hidePreloader();
             return await checkResponse(res);
         } else {
+            hidePreloader();
             return Promise.reject(err);
         }
     }

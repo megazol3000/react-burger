@@ -6,18 +6,28 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
 import { recoverPassword } from "../utils/burger-api";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../redux/slices/preloader-slice";
 
 const PasswordRecovery = () => {
   const [emailValue, setEmailValue] = useState("");
   const [requestState, setRequestState] = useState("");
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChange = (e) => {
     setEmailValue(e.target.value);
   };
 
-  const handleClick = () => {
-    recoverPassword(emailValue, setRequestState);
+  const hidePreloader = () => {
+    dispatch(setLoading(false));
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
+    recoverPassword(emailValue, setRequestState, hidePreloader);
   };
 
   localStorage.removeItem("resetPasswordAccess");
@@ -31,23 +41,22 @@ const PasswordRecovery = () => {
   return (
     <div className="bodyContainerCenter pt-10 pb-10">
       <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
-      <Input
-        type={"email"}
-        value={emailValue}
-        onChange={onChange}
-        placeholder={"Укажите E-mail"}
-        size={"default"}
-        extraClass="mb-6"
-      />
-      <Button extraClass="mb-20" onClick={handleClick} htmlType="button">
-        Восстановить
-      </Button>
-      <p
-        className="text text_type_main-small mb-4"
-        style={{ color: "#8585AD" }}
-      >
+      <form onSubmit={submit}>
+        <Input
+          type={"email"}
+          value={emailValue}
+          onChange={onChange}
+          placeholder={"Укажите E-mail"}
+          size={"default"}
+          extraClass="mb-6"
+        />
+        <Button extraClass="mb-20" htmlType="submit">
+          Восстановить
+        </Button>
+      </form>
+      <p className="text text_type_main-small mb-4 text_gray">
         Вспомнили пароль?
-        <Link to="/login" style={{ color: "#4C4CFF" }}>
+        <Link to="/login" className="text_blue">
           Войти
         </Link>
       </p>

@@ -97,6 +97,13 @@ const BurgerConstructor = () => {
             />
           )}
         </div>
+        {!bun && scrollIngredients && scrollIngredients.length === 0 && (
+          <div className={styles.emptyConstructor}>
+            <strong className="text text_type_main-default">
+              Перетащите ингредиенты и булку в эту область
+            </strong>
+          </div>
+        )}
       </div>
       <OrderBlock />
     </div>

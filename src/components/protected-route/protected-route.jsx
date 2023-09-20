@@ -1,34 +1,17 @@
 import { useLocation, Navigate } from "react-router-dom";
 
-export const ProtectedRouteElement = ({ element }) => {
+export default function ProtectedRoute({ element, anonymous = false }) {
+  const isLoggedIn = localStorage.getItem("accessToken") ? true : false;
   const location = useLocation();
+  const from = location.state?.from || "/";
 
-  const authorizedLock = [
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/reset-password",
-  ];
-  const notAuthorizedLock = "/profile";
-
-  console.log(location.pathname);
-  console.log(localStorage.getItem("resetPasswordAccess"));
-
-  if (
-    localStorage.getItem("accessToken") &&
-    authorizedLock.includes(location.pathname)
-  ) {
-    return <Navigate to="/profile" replace />;
-  } else if (
-    !localStorage.getItem("accessToken") &&
-    location.pathname.includes(notAuthorizedLock)
-  ) {
-    return <Navigate to="/login" replace />;
-  } else if (
-    !localStorage.getItem("resetPasswordAccess") &&
-    location.pathname === "/reset-password"
-  ) {
-    return <Navigate to="/forgot-password" replace />;
+  if (anonymous && isLoggedIn) {
+    return <Navigate to={from} />;
   }
+
+  if (!anonymous && !isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
+
   return element;
-};
+}

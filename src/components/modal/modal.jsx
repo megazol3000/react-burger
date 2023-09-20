@@ -3,11 +3,9 @@ import ReactDOM from "react-dom";
 import ModalHeader from "./modal-header/modal-header";
 import ModalOverlay from "./modal-overlay/modal-overlay";
 import styles from "./modal.module.css";
-import IngredientDetails from "./ingredient-details/ingredient-details";
-import OrderDetails from "./order-details/order-details";
 import PropTypes from "prop-types";
 
-const Modal = ({ onClose, title, type }) => {
+const Modal = ({ onClose, title, type, child }) => {
   const modalRoot = document.getElementById("react-modals");
   const topPosStyle = {
     top: `calc(50vh - ${type === "ingredient" ? 270 : 360}px)`,
@@ -28,7 +26,7 @@ const Modal = ({ onClose, title, type }) => {
     <>
       <div style={topPosStyle} className={`${styles.Modal} p-10 pb-15`}>
         <ModalHeader title={title} onClose={onClose} />
-        {type === "ingredient" ? <IngredientDetails /> : <OrderDetails />}
+        {child}
       </div>
       <ModalOverlay onClose={onClose} />
     </>,

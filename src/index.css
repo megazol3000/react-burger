@@ -13,3 +13,15 @@ a {
   text-decoration: none;
   color: initial;
 }
+
+.text_gray {
+  color: #8585AD;
+}
+
+.text_light {
+  color: #F2F2F3;
+}
+
+.text_blue {
+  color: #4C4CFF;
+}

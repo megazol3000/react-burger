@@ -8,16 +8,21 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../utils/burger-api";
 import { fetchWithRefresh } from "../utils/burger-api";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../redux/slices/preloader-slice";
 
 const Profile = () => {
   const [logoutState, setLogoutState] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const logOut = () => {
-    logout(setLogoutState);
+  const hidePreloader = () => {
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -26,7 +31,7 @@ const Profile = () => {
     }
   }, [logoutState]);
 
-  const serResponse = (data) => {
+  const setResponse = (data) => {
     setName(data.user.name);
     setEmail(data.user.email);
   };
@@ -41,11 +46,13 @@ const Profile = () => {
           authorization: localStorage.getItem("accessToken"),
         },
       },
-      serResponse
+      setResponse
     );
   }, []);
 
-  const saveClick = () => {
+  const submit = (e) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
     fetchWithRefresh(
       "/auth/user",
       {
@@ -57,9 +64,11 @@ const Profile = () => {
         body: JSON.stringify({
           name: name,
           email: email,
+          password: password,
         }),
       },
-      serResponse
+      setResponse,
+      hidePreloader
     );
   };
 
@@ -86,36 +95,44 @@ const Profile = () => {
           История заказов
         </Link>
         <Link
-          className="text text_type_main-medium mb-20"
-          style={{ color: "#8585AD" }}
-          onClick={logOut}
+          className="text text_type_main-medium mb-20 text_gray"
+          onClick={() => {
+            dispatch(setLoading(true));
+            logout(setLogoutState, hidePreloader);
+          }}
         >
           Выход
         </Link>
-        <p className="text text_type_main-small" style={{ color: "#8585AD" }}>
+        <p className="text text_type_main-small text_gray">
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
       {location.pathname === "/profile" ? (
-        <div>
+        <form onSubmit={submit}>
           <Input
-            type={"text"}
+            type="text"
+            name="name"
             value={name}
             placeholder={"Имя"}
             extraClass="mb-6"
             onChange={(e) => setName(e.target.value)}
           />
           <Input
-            type={"text"}
+            type="text"
+            name="email"
             value={email}
             placeholder={"Логин"}
             extraClass="mb-6"
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Button onClick={saveClick} htmlType="button">
-            Сохранить
-          </Button>
-        </div>
+          <PasswordInput
+            name="password"
+            value={password}
+            extraClass="mb-6"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button htmlType="submit">Сохранить</Button>
+        </form>
       ) : (
         <div>
           <p className="text text_type_main-large">

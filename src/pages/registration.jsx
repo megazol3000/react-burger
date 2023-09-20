@@ -7,6 +7,8 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
 import { registartion } from "../utils/burger-api";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../redux/slices/preloader-slice";
 
 const Registration = () => {
   const [name, setName] = useState("");
@@ -15,9 +17,16 @@ const Registration = () => {
   const [requestState, setRequestState] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleClick = () => {
-    registartion(name, email, password, setRequestState);
+  const hidePreloader = () => {
+    dispatch(setLoading(false));
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
+    registartion(name, email, password, setRequestState, hidePreloader);
   };
 
   useEffect(() => {
@@ -29,34 +38,33 @@ const Registration = () => {
   return (
     <div className="bodyContainerCenter pt-10 pb-10">
       <p className="text text_type_main-medium mb-6">Регистрация</p>
-      <Input
-        type={"text"}
-        value={name}
-        placeholder={"Имя"}
-        extraClass="mb-6"
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Input
-        type={"email"}
-        value={email}
-        placeholder={"E-mail"}
-        extraClass="mb-6"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <PasswordInput
-        value={password}
-        extraClass="mb-6"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button extraClass="mb-20" onClick={handleClick} htmlType="button">
-        Зарегистрироваться
-      </Button>
-      <p
-        className="text text_type_main-small mb-4"
-        style={{ color: "#8585AD" }}
-      >
+      <form onSubmit={submit}>
+        <Input
+          type={"text"}
+          value={name}
+          placeholder={"Имя"}
+          extraClass="mb-6"
+          onChange={(e) => setName(e.target.value)}
+        />
+        <Input
+          type={"email"}
+          value={email}
+          placeholder={"E-mail"}
+          extraClass="mb-6"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <PasswordInput
+          value={password}
+          extraClass="mb-6"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button extraClass="mb-20" htmlType="submit">
+          Зарегистрироваться
+        </Button>
+      </form>
+      <p className="text text_type_main-small mb-4 text_gray">
         Уже зарегистрированы?
-        <Link to="/login" style={{ color: "#4C4CFF" }}>
+        <Link to="/login" className="text_blue">
           Войти
         </Link>
       </p>

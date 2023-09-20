@@ -48,10 +48,7 @@ const IngrediendCard = (props) => {
 
   return (
     <Link
-      style={{
-        display: "contents",
-        color: "inherit",
-      }}
+      className={styles.link}
       key={id}
       to={{
         pathname: `/${id}`,

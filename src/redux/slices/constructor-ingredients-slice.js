@@ -1,15 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  bun: '643d69a5c3f7b9001cfa093c',
-  ingredients: [
-    '643d69a5c3f7b9001cfa0941',
-    '643d69a5c3f7b9001cfa093e',
-    '643d69a5c3f7b9001cfa0941',
-    '643d69a5c3f7b9001cfa0942',
-    '643d69a5c3f7b9001cfa0943',
-    '643d69a5c3f7b9001cfa093f',
-  ],
+  bun: '',
+  ingredients: [],
 };
 
 export const constructorIngredientsSlice = createSlice({
@@ -33,12 +26,16 @@ export const constructorIngredientsSlice = createSlice({
 
       sortedArr.splice(dragIdx, 1);
       sortedArr.splice(hoverIdx, 0, ingredients);
-      
+
       state.ingredients = sortedArr;
+    },
+    removeAllIngredients: (state) => {
+      state.bun = '';
+      state.ingredients = [];
     },
   },
 });
 
-export const { addIngredient, removeIngredient, addBun, moveIngredient } = constructorIngredientsSlice.actions;
+export const { addIngredient, removeIngredient, addBun, moveIngredient, removeAllIngredients } = constructorIngredientsSlice.actions;
 
 export default constructorIngredientsSlice.reducer;

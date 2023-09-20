@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setCurrentIngredient } from "../../../redux/slices/current-ingredient-slice";
 import { useEffect } from "react";
-import NotFound from "../../../pages/not-found";
+import NotFound from "../../../pages/not-found/not-found";
 
 const IngredientDetails = () => {
   const { id } = useParams("id");
@@ -23,8 +23,6 @@ const IngredientDetails = () => {
   }, [current]);
 
   const currentIngredient = useSelector((state) => state.currentIngredient);
-
-  console.log("current", current);
 
   return current ? (
     <div className={styles.details}>
