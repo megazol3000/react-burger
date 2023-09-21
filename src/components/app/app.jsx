@@ -1,12 +1,7 @@
 import "./app.css";
 import AppHeader from "../app-header/app-header";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Home from "../../pages/home";
 import Login from "../../pages/login";
 import Registration from "../../pages/registration";
@@ -116,7 +111,6 @@ const App = () => {
               />
             </Routes>
           )}
-          <div id="react-modals"></div>
         </>
       )}
     </div>

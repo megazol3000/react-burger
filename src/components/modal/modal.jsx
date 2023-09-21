@@ -6,7 +6,7 @@ import styles from "./modal.module.css";
 import PropTypes from "prop-types";
 
 const Modal = ({ onClose, title, type, child }) => {
-  const modalRoot = document.getElementById("react-modals");
+  const modalRoot = document.body;
   const topPosStyle = {
     top: `calc(50vh - ${type === "ingredient" ? 270 : 360}px)`,
   };
