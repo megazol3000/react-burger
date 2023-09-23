@@ -104,7 +104,6 @@ const App = () => {
                       dispatch(setModalVisible(false));
                     }}
                     title="Детали ингредиента"
-                    type="ingredient"
                     child={<IngredientDetails />}
                   />
                 }

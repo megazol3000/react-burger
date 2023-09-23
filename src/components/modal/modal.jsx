@@ -5,10 +5,10 @@ import ModalOverlay from "./modal-overlay/modal-overlay";
 import styles from "./modal.module.css";
 import PropTypes from "prop-types";
 
-const Modal = ({ onClose, title, type, child }) => {
-  const modalRoot = document.body;
+const Modal = ({ onClose, title, child }) => {
+  const modalRoot = document.getElementById("modals");
   const topPosStyle = {
-    top: `calc(50vh - ${type === "ingredient" ? 270 : 360}px)`,
+    top: `calc(50vh - ${title ? 270 : 360}px)`,
   };
   const ECK_KEYCODE = 27;
 
