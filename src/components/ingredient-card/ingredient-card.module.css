@@ -19,3 +19,8 @@
     width: 100%;
     height: 48px;
 }
+
+.link {
+    display: contents;
+    color: inherit;
+}

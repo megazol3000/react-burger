@@ -23,6 +23,7 @@
 
 .constructorIngredients {
     display: flex;
+    height: 100%;
     flex-direction: column;
     gap: 16px;
     align-items: flex-end;
@@ -30,6 +31,16 @@
 
 .onHover {
     filter: brightness(1.1);
+}
+
+.emptyConstructor {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 100px);
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border: 3px dashed rgba(255,255,255, 0.03);
 }
 
 @media screen and (max-height: 968px) {

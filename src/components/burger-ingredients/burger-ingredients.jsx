@@ -2,12 +2,7 @@ import React, { useMemo } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngrediendCard from "../ingredient-card/ingredient-card";
-import { useSelector, useDispatch } from "react-redux";
-import { getIngredients } from "../../utils/burger-api";
-import {
-  setIngredients,
-  setError,
-} from "../../redux/slices/all-ingredients-slice";
+import { useSelector } from "react-redux";
 
 const BurgerIngredients = () => {
   const [current, setCurrent] = React.useState("one");
@@ -15,17 +10,6 @@ const BurgerIngredients = () => {
   const allIngredients = useSelector(
     (state) => state.allIngredients.ingredients
   );
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    getIngredients()
-      .then((json) => {
-        dispatch(setIngredients(json.data));
-      })
-      .catch(() => {
-        dispatch(setError());
-      });
-  }, []);
 
   const scrollBlock = document.querySelector("#scrollBlock");
   const bunsBlock = document.querySelector("#bunsBlock");
@@ -69,14 +53,17 @@ const BurgerIngredients = () => {
 
   const bunFilter = useMemo(() => ingredientFilter("bun"), [allIngredients]);
 
-  const sauceFilter = useMemo(() => ingredientFilter("sauce"), [allIngredients]);
+  const sauceFilter = useMemo(
+    () => ingredientFilter("sauce"),
+    [allIngredients]
+  );
 
   const mainFilter = useMemo(() => ingredientFilter("main"), [allIngredients]);
 
   return (
     <div className={styles.BurgerIngredientsContainer}>
       <h1 className="text text_type_main-large mb-5">Соберите бургер</h1>
-      <div style={{ display: "flex" }} className="mb-10">
+      <div className={`${styles.BurgerIngredientsTabs} mb-10`}>
         <Tab
           value="one"
           active={current === "one"}

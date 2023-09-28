@@ -6,9 +6,14 @@ import styles from "./order-block.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getOrder } from "../../utils/burger-api";
 import { setOrderName, setOrderNumber } from "../../redux/slices/order-slice";
+import { setLoading } from "../../redux/slices/preloader-slice";
+import { useNavigate } from "react-router-dom";
+import OrderDetails from "../modal/order-details/order-details";
+import { removeAllIngredients } from "../../redux/slices/constructor-ingredients-slice";
 
 const OrderBlock = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
+  const navigate = useNavigate();
 
   const allIngredients = useSelector(
     (state) => state.allIngredients.ingredients
@@ -30,7 +35,10 @@ const OrderBlock = () => {
         (item) => item._id === constructorBunId
       );
       let price = 0;
-      price += objBun.price * 2;
+      if (objBun) {
+        price += objBun.price * 2;
+      }
+
       constructorIngredientsIds.forEach((currItem) => {
         const objItem = allIngredients.find((item) => item._id === currItem);
         if (objItem) {
@@ -46,13 +54,29 @@ const OrderBlock = () => {
     dispatch(setOrderNumber(data.order.number));
   };
 
+  const hidePreloader = () => {
+    dispatch(setLoading(false));
+  };
+
+  const removeIngredients = () => {
+    dispatch(removeAllIngredients());
+  };
+
   const openModal = () => {
-    getOrder(
-      constructorBunId,
-      constructorIngredientsIds,
-      setOrderDetails,
-      setModalVisible
-    );
+    dispatch(setLoading(true));
+    if (localStorage.getItem("accessToken")) {
+      getOrder(
+        constructorBunId,
+        constructorIngredientsIds,
+        setOrderDetails,
+        setModalVisible,
+        hidePreloader,
+        removeIngredients
+      );
+    } else {
+      navigate("/login");
+      dispatch(setLoading(false));
+    }
   };
 
   return (
@@ -65,16 +89,21 @@ const OrderBlock = () => {
           <CurrencyIcon type="primary" />
         </div>
         <Button
-          htmlType="button"
           type="primary"
           size="large"
           onClick={openModal}
+          htmlType="button"
         >
           Оформить заказ
         </Button>
       </div>
       {modalVisible && (
-        <Modal onClose={() => setModalVisible(false)} title="" type="order" />
+        <Modal
+          onClose={() => setModalVisible(false)}
+          title=""
+          type="order"
+          child={<OrderDetails />}
+        />
       )}
     </>
   );

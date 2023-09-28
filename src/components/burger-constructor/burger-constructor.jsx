@@ -27,7 +27,7 @@ const BurgerConstructor = () => {
 
   const bun = useMemo(
     () => allIngredients.find((item) => item._id === constructorBunId),
-    [constructorBunId]
+    [allIngredients, constructorBunId]
   );
 
   const [{ isHover }, dropTarget] = useDrop({
@@ -69,7 +69,7 @@ const BurgerConstructor = () => {
           {bun && (
             <ConstructorElement
               type="top"
-              text={bun.name}
+              text={bun.name + " (Верх)"}
               price={bun.price}
               thumbnail={bun.image}
               isLocked
@@ -90,13 +90,20 @@ const BurgerConstructor = () => {
           {bun && (
             <ConstructorElement
               type="bottom"
-              text={bun.name}
+              text={bun.name + " (Низ)"}
               price={bun.price}
               thumbnail={bun.image}
               isLocked
             />
           )}
         </div>
+        {!bun && scrollIngredients && scrollIngredients.length === 0 && (
+          <div className={styles.emptyConstructor}>
+            <strong className="text text_type_main-default">
+              Перетащите ингредиенты и булку в эту область
+            </strong>
+          </div>
+        )}
       </div>
       <OrderBlock />
     </div>

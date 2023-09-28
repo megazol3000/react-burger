@@ -16,16 +16,10 @@ const OrderDetails = () => {
         идентификатор заказа
       </span>
       <img src={checkIcon} alt="check-icon" />
-      <span
-        style={{ color: "#F2F2F3" }}
-        className="text text_type_main-default mt-15 mb-2"
-      >
+      <span className="text text_type_main-default mt-15 mb-2 text_light">
         Ваш заказ начали готовить
       </span>
-      <span
-        style={{ color: "#8585AD" }}
-        className="text text_type_main-default mb-15"
-      >
+      <span className="text text_type_main-default mb-15 text_gray">
         Дождитесь готовности на орбитальной станции
       </span>
     </div>

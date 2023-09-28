@@ -5,6 +5,10 @@
     flex-direction: column;
 }
 
+.BurgerIngredientsTabs {
+    display: flex;
+}
+
 .BurgerIngredientsBlock {
     flex-grow: 1;
     overflow: overlay;

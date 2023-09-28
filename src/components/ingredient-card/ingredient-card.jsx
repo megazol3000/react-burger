@@ -6,12 +6,14 @@ import Modal from "../modal/modal";
 import PropTypes from "prop-types";
 import getIngredientPropTypes from "../../utils/ingredient-prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentIngredient } from "../../redux/slices/current-ingredient-slice";
+import {
+  setCurrentIngredient,
+  setModalVisible,
+} from "../../redux/slices/current-ingredient-slice";
 import { useDrag } from "react-dnd/dist/hooks";
+import { Link, useLocation } from "react-router-dom";
 
 const IngrediendCard = (props) => {
-  const [modalVisible, setModalVisible] = React.useState(false);
-
   const constructorBunId = useSelector(
     (state) => state.constructorIngredients.bun
   );
@@ -20,6 +22,7 @@ const IngrediendCard = (props) => {
   );
 
   const dispatch = useDispatch();
+  let location = useLocation();
 
   let count = useMemo(() => {
     let acc = 0;
@@ -33,7 +36,7 @@ const IngrediendCard = (props) => {
 
   const openModal = () => {
     dispatch(setCurrentIngredient(props.data));
-    setModalVisible(true);
+    dispatch(setModalVisible(true));
   };
 
   const id = props.data._id;
@@ -44,7 +47,14 @@ const IngrediendCard = (props) => {
   });
 
   return (
-    <>
+    <Link
+      className={styles.link}
+      key={id}
+      to={{
+        pathname: `/${id}`,
+      }}
+      state={{ cardClick: location }}
+    >
       <div
         ref={dragRef}
         className={`${styles.IngrediendCard} mb-8`}
@@ -60,14 +70,7 @@ const IngrediendCard = (props) => {
           {props.data.name}
         </div>
       </div>
-      {modalVisible && (
-        <Modal
-          onClose={() => setModalVisible(false)}
-          title="Детали ингредиента"
-          type="ingredient"
-        />
-      )}
-    </>
+    </Link>
   );
 };
 

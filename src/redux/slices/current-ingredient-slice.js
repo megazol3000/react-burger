@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+  modalVisible: false,
   calories: 0,
   carbohydrates: 0,
   fat: 0,
@@ -32,10 +33,13 @@ export const currentIngredient = createSlice({
       state.type = action.payload.type;
       state.__v = action.payload.__v;
       state._id = action.payload._id;
+    },
+    setModalVisible: (state, action) => {
+      state.modalVisible = action.payload;
     }
   },
 });
 
-export const { setCurrentIngredient } = currentIngredient.actions;
+export const { setCurrentIngredient, setModalVisible } = currentIngredient.actions;
 
 export default currentIngredient.reducer;
