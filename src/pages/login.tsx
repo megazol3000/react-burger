@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
+import { useEffect, FormEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
@@ -12,16 +12,16 @@ import {
 import { setLoading } from "../redux/slices/preloader-slice";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../utils/hooks/use-app-selector";
+import { useForm } from "../utils/hooks/use-form";
 
 const Login: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const loginRequestState = useAppSelector(
     (state) => state.user.loginRequestState
   );
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { values, handleChange } = useForm({});
 
   dispatch(setPasswordRecoveryState());
 
@@ -32,7 +32,7 @@ const Login: FC = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    dispatch(fetchLogin({ email, password, hidePreloader }));
+    dispatch(fetchLogin({ ...values, hidePreloader }));
   };
 
   useEffect(() => {
@@ -47,19 +47,17 @@ const Login: FC = () => {
       <form onSubmit={submit}>
         <Input
           type={"email"}
-          value={email}
+          name="email"
+          value={values.email || ""}
           placeholder={"E-mail"}
           extraClass="mb-6"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => handleChange(e)}
         />
         <PasswordInput
-          value={password}
+          name="password"
+          value={values.password || ""}
           extraClass="mb-6"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => handleChange(e)}
         />
         <Button extraClass="mb-20" htmlType="submit">
           Войти

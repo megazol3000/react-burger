@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
+import { useEffect, FormEvent, FC } from "react";
 import {
   Input,
   Button,
@@ -11,21 +11,18 @@ import {
 import { setLoading } from "../redux/slices/preloader-slice";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../utils/hooks/use-app-selector";
+import { useForm } from "../utils/hooks/use-form";
 
 const PasswordRecovery: FC = () => {
-  const [email, setEmail] = useState("");
   const requestState = useAppSelector(
     (state) => state.user.passwordRecoveryState
   );
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { values, handleChange } = useForm({});
 
   dispatch(setPasswordResetState());
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
 
   const hidePreloader = () => {
     dispatch(setLoading(false));
@@ -34,7 +31,7 @@ const PasswordRecovery: FC = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    dispatch(fetchPasswordRecovery({ email, hidePreloader }));
+    dispatch(fetchPasswordRecovery({ ...values, hidePreloader }));
   };
 
   localStorage.removeItem("resetPasswordAccess");
@@ -51,8 +48,9 @@ const PasswordRecovery: FC = () => {
       <form onSubmit={submit}>
         <Input
           type={"email"}
-          value={email}
-          onChange={onChange}
+          name="email"
+          value={values.email || ""}
+          onChange={(e) => handleChange(e)}
           placeholder={"Укажите E-mail"}
           size={"default"}
           extraClass="mb-6"

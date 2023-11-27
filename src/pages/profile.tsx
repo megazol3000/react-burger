@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent, ChangeEvent, FC } from "react";
+import { useEffect, FormEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
@@ -10,12 +10,9 @@ import { fetchWithRefresh } from "../utils/burger-api";
 import { setLoading } from "../redux/slices/preloader-slice";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../utils/hooks/use-app-selector";
+import { useForm } from "../utils/hooks/use-form";
 
 const Profile: FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const logoutState = useAppSelector((state) => {
     return state.user.logoutState;
   });
@@ -23,6 +20,7 @@ const Profile: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { values, handleChange, setValues } = useForm({});
 
   const hidePreloader = () => {
     dispatch(setLoading(false));
@@ -38,8 +36,8 @@ const Profile: FC = () => {
     success: boolean;
     user: { email: string; name: string };
   }) => {
-    setName(data.user.name);
-    setEmail(data.user.email);
+    setValues(data.user.name);
+    setValues(data.user.email);
   };
 
   useEffect(() => {
@@ -68,11 +66,7 @@ const Profile: FC = () => {
           "Content-Type": "application/json;charset=utf-8",
           authorization: localStorage.getItem("accessToken"),
         },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),
+        body: JSON.stringify(values),
       },
       setResponse,
       hidePreloader
@@ -120,30 +114,24 @@ const Profile: FC = () => {
           <Input
             type="text"
             name="name"
-            value={name}
+            value={values.name || ""}
             placeholder={"Имя"}
             extraClass="mb-6"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setName(e.target.value)
-            }
+            onChange={(e) => handleChange(e)}
           />
           <Input
             type="text"
             name="email"
-            value={email}
+            value={values.email || ""}
             placeholder={"Логин"}
             extraClass="mb-6"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => handleChange(e)}
           />
           <PasswordInput
             name="password"
-            value={password}
+            value={values.password || ""}
             extraClass="mb-6"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => handleChange(e)}
           />
           <Button htmlType="submit">Сохранить</Button>
         </form>

@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
+import { useEffect, FormEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
@@ -9,22 +9,14 @@ import { fetchResetPassword } from "../redux/slices/user-slice";
 import { setLoading } from "../redux/slices/preloader-slice";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../utils/hooks/use-app-selector";
+import { useForm } from "../utils/hooks/use-form";
 
 const PasswordReset: FC = () => {
-  const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
   const requestState = useAppSelector((state) => state.user.passwordResetState);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const passwordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const tokenChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setToken(e.target.value);
-  };
+  const { values, handleChange } = useForm({});
 
   const hidePreloader = () => {
     dispatch(setLoading(false));
@@ -33,7 +25,7 @@ const PasswordReset: FC = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    dispatch(fetchResetPassword({ password, token, hidePreloader }));
+    dispatch(fetchResetPassword({ ...values, hidePreloader }));
   };
 
   useEffect(() => {
@@ -49,15 +41,17 @@ const PasswordReset: FC = () => {
       <form onSubmit={submit}>
         <PasswordInput
           placeholder={"Введите новый пароль"}
-          value={password}
-          onChange={passwordChange}
+          value={values.password || ""}
+          name="password"
+          onChange={(e) => handleChange(e)}
           extraClass="mb-6"
         />
         <Input
           type={"text"}
           placeholder={"Введите код из письма"}
-          value={token}
-          onChange={tokenChange}
+          value={values.token || ""}
+          name="token"
+          onChange={(e) => handleChange(e)}
           extraClass="mb-6"
         />
         <Button extraClass="mb-20" htmlType="submit">

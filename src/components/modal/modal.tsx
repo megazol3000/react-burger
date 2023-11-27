@@ -23,8 +23,8 @@ const Modal: FC<IModalProps> = ({ onClose, title, child }) => {
         onClose();
       }
     };
-    window.addEventListener("keydown", (e) => close(e));
-    return () => window.removeEventListener("keydown", (e) => close(e));
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
   }, [onClose]);
 
   return ReactDOM.createPortal(
