@@ -1,25 +1,23 @@
-import "../components/app/app.css";
-import { useState, useEffect, SyntheticEvent, FC } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import {
   fetchLogin,
   setPasswordRecoveryState,
 } from "../redux/slices/user-slice";
 import { setLoading } from "../redux/slices/preloader-slice";
-import { IState } from "../utils/types";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../utils/hooks/use-app-selector";
 
-const Login:FC = () => {
+const Login: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const loginRequestState = useSelector(
-    (state: IState) => state.user.loginRequestState
+  const loginRequestState = useAppSelector(
+    (state) => state.user.loginRequestState
   );
 
   const navigate = useNavigate();
@@ -31,7 +29,7 @@ const Login:FC = () => {
     dispatch(setLoading(false));
   };
 
-  const submit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
     dispatch(fetchLogin({ email, password, hidePreloader }));
@@ -52,12 +50,16 @@ const Login:FC = () => {
           value={email}
           placeholder={"E-mail"}
           extraClass="mb-6"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
         />
         <PasswordInput
           value={password}
           extraClass="mb-6"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setPassword(e.target.value)
+          }
         />
         <Button extraClass="mb-20" htmlType="submit">
           Войти

@@ -1,5 +1,4 @@
-import "../components/app/app.css";
-import { useState, useEffect, SyntheticEvent, FC } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
@@ -8,17 +7,16 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchLogout } from "../redux/slices/user-slice";
 import { fetchWithRefresh } from "../utils/burger-api";
-import { useSelector } from "react-redux";
 import { setLoading } from "../redux/slices/preloader-slice";
-import { IState } from "../utils/types";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../utils/hooks/use-app-selector";
 
 const Profile: FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const logoutState = useSelector((state: IState) => {
+  const logoutState = useAppSelector((state) => {
     return state.user.logoutState;
   });
 
@@ -59,7 +57,7 @@ const Profile: FC = () => {
     );
   }, []);
 
-  const submit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
     fetchWithRefresh(
@@ -104,7 +102,7 @@ const Profile: FC = () => {
           История заказов
         </Link>
         <Link
-          to="/profile/login"
+          to="/profile"
           className="text text_type_main-medium mb-20 text_gray"
           onClick={() => {
             dispatch(setLoading(true));
@@ -125,7 +123,9 @@ const Profile: FC = () => {
             value={name}
             placeholder={"Имя"}
             extraClass="mb-6"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setName(e.target.value)
+            }
           />
           <Input
             type="text"
@@ -133,13 +133,17 @@ const Profile: FC = () => {
             value={email}
             placeholder={"Логин"}
             extraClass="mb-6"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
           />
           <PasswordInput
             name="password"
             value={password}
             extraClass="mb-6"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
           />
           <Button htmlType="submit">Сохранить</Button>
         </form>

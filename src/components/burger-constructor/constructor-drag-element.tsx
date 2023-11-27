@@ -1,5 +1,4 @@
 import styles from "./constructor-drag-element.module.css";
-import { useDispatch } from "react-redux";
 import {
   removeIngredient,
   moveIngredient,
@@ -9,6 +8,7 @@ import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-comp
 import { useDrag, useDrop } from "react-dnd";
 import { FC, useRef } from "react";
 import { IIngredient } from "../../utils/types";
+import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
 
 interface IConstructorDragElement {
   objItem: IIngredient;
@@ -19,7 +19,7 @@ const ConstructorDragElement: FC<IConstructorDragElement> = ({
   objItem,
   idx,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const ref = useRef<HTMLDivElement>(null);
 

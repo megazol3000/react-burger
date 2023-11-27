@@ -1,22 +1,21 @@
-import React, { FC, useMemo, useEffect } from "react";
+import React, { FC, useMemo, useRef } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngrediendCard from "../ingredient-card/ingredient-card";
-import { useSelector } from "react-redux";
-import { IState, IIngredient } from "../../utils/types";
+import { IIngredient } from "../../utils/types";
+import { useAppSelector } from "../../utils/hooks/use-app-selector";
 
 const BurgerIngredients: FC = () => {
   const [current, setCurrent] = React.useState("one");
 
-  const allIngredients: IIngredient[] = useSelector(
-    (state: IState) => state.allIngredients.ingredients
+  const allIngredients: IIngredient[] = useAppSelector(
+    (state) => state.allIngredients.ingredients
   );
 
-  const scrollBlock = document.querySelector("#scrollBlock") as HTMLElement;
-  const bunsBlock = document.querySelector("#bunsBlock") as HTMLElement;
-  const sausesBlock = document.querySelector("#sausesBlock") as HTMLElement;
-
   const tabClick = (tab: string) => {
+    const scrollBlock = document.querySelector("#scrollBlock") as HTMLElement;
+    const bunsBlock = document.querySelector("#bunsBlock") as HTMLElement;
+    const sausesBlock = document.querySelector("#sausesBlock") as HTMLElement;
     setCurrent(tab);
     switch (tab) {
       case "one":
@@ -32,30 +31,29 @@ const BurgerIngredients: FC = () => {
     }
   };
 
-  if (scrollBlock) {
-    scrollBlock.onscroll = () => {
-      if (scrollBlock.scrollTop === 0) {
-        setCurrent("one");
-      }
-      if (scrollBlock.scrollTop >= bunsBlock.offsetHeight + 54) {
-        setCurrent("two");
-      }
-      if (
-        scrollBlock.scrollTop >=
-        bunsBlock.offsetHeight + sausesBlock.offsetHeight + 108
-      ) {
-        setCurrent("three");
-      }
-    };
-  }
+  const onScroll = () => {
+    const scrollBlock = document.querySelector("#scrollBlock") as HTMLElement;
+    const bunsBlock = document.querySelector("#bunsBlock") as HTMLElement;
+    const sausesBlock = document.querySelector("#sausesBlock") as HTMLElement;
+
+    if (scrollBlock.scrollTop === 0) {
+      setCurrent("one");
+    }
+    if (scrollBlock.scrollTop >= bunsBlock.offsetHeight + 54) {
+      setCurrent("two");
+    }
+    if (
+      scrollBlock.scrollTop >=
+      bunsBlock.offsetHeight + sausesBlock.offsetHeight + 108
+    ) {
+      setCurrent("three");
+    }
+  };
 
   const ingredientFilter = (type: string) =>
-    allIngredients.filter((item: IIngredient) => item.type === type);
+    allIngredients.filter((item) => item.type === type);
 
-  const bunFilter = useMemo<any>(
-    () => ingredientFilter("bun"),
-    [allIngredients]
-  );
+  const bunFilter = useMemo(() => ingredientFilter("bun"), [allIngredients]);
 
   const sauceFilter = useMemo(
     () => ingredientFilter("sauce"),
@@ -92,13 +90,17 @@ const BurgerIngredients: FC = () => {
           Начинки
         </Tab>
       </div>
-      <div className={styles.BurgerIngredientsBlock} id="scrollBlock">
+      <div
+        className={styles.BurgerIngredientsBlock}
+        id="scrollBlock"
+        onScroll={onScroll}
+      >
         <h2 className="text text_type_main-medium mb-6">Булки</h2>
         <div
           className={`${styles.BurgerIngredientsTypeWrap} pr-4 pl-4`}
           id="bunsBlock"
         >
-          {bunFilter.map((item: IIngredient) => (
+          {bunFilter.map((item) => (
             <IngrediendCard data={item} key={item._id} />
           ))}
         </div>

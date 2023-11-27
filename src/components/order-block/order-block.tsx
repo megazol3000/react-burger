@@ -3,36 +3,36 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import styles from "./order-block.module.css";
-import { useSelector } from "react-redux";
 import { setLoading } from "../../redux/slices/preloader-slice";
 import { useNavigate } from "react-router-dom";
 import OrderDetails from "../modal/order-details/order-details";
 import { removeAllIngredients } from "../../redux/slices/constructor-ingredients-slice";
 import { fetchOrder, setModalVisible } from "../../redux/slices/order-slice";
-import { IState, IIngredient } from "../../utils/types";
+import { IIngredient } from "../../utils/types";
 import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../../utils/hooks/use-app-selector";
 
-const OrderBlock:FC = () => {
+const OrderBlock: FC = () => {
   const navigate = useNavigate();
 
-  const allIngredients = useSelector(
-    (state: IState) => state.allIngredients.ingredients
+  const allIngredients = useAppSelector(
+    (state) => state.allIngredients.ingredients
   );
 
-  const constructorBunId = useSelector(
-    (state: IState) => state.constructorIngredients.bun
+  const constructorBunId = useAppSelector(
+    (state) => state.constructorIngredients.bun
   );
 
-  const constructorIngredientsIds = useSelector(
-    (state: IState) => state.constructorIngredients.ingredients
+  const constructorIngredientsIds = useAppSelector(
+    (state) => state.constructorIngredients.ingredients
   );
-  const modalVisible = useSelector((state: IState) => state.order.modalVisible);
+  const modalVisible = useAppSelector((state) => state.order.modalVisible);
   const dispatch = useAppDispatch();
 
   const calcedPrice = useMemo(() => {
     if (allIngredients.length) {
       const objBun = allIngredients.find(
-        (item: IIngredient) => item._id === constructorBunId
+        (item) => item._id === constructorBunId
       );
       let price = 0;
       if (objBun) {
@@ -40,9 +40,7 @@ const OrderBlock:FC = () => {
       }
 
       constructorIngredientsIds.forEach((currItem: string) => {
-        const objItem = allIngredients.find(
-          (item: IIngredient) => item._id === currItem
-        );
+        const objItem = allIngredients.find((item) => item._id === currItem);
         if (objItem) {
           price += objItem.price;
         }

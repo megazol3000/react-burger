@@ -1,11 +1,10 @@
 import styles from "./order-details.module.css";
 import checkIcon from "../../../images/graphics.svg";
-import { useSelector } from "react-redux";
-import { IState } from "../../../utils/types";
 import { FC } from "react";
+import { useAppSelector } from "../../../utils/hooks/use-app-selector";
 
-const OrderDetails:FC = () => {
-  const orderNumber = useSelector((state: IState) => state.order.order.number);
+const OrderDetails: FC = () => {
+  const orderNumber = useAppSelector((state) => state.order.order.number);
 
   return (
     <div className={`${styles.orderDetails}`}>

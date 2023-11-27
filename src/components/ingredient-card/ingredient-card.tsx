@@ -2,14 +2,15 @@ import React, { FC, useMemo } from "react";
 import styles from "./ingredient-card.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector, useDispatch } from "react-redux";
 import {
   setCurrentIngredient,
   setModalVisible,
 } from "../../redux/slices/current-ingredient-slice";
 import { useDrag } from "react-dnd/dist/hooks";
 import { Link, useLocation } from "react-router-dom";
-import { IIngredient, IState } from "../../utils/types";
+import { IIngredient } from "../../utils/types";
+import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../../utils/hooks/use-app-selector";
 
 interface IIngredientCardProps {
   data: IIngredient;
@@ -17,14 +18,14 @@ interface IIngredientCardProps {
 }
 
 const IngrediendCard: FC<IIngredientCardProps> = (props) => {
-  const constructorBunId = useSelector(
-    (state: IState) => state.constructorIngredients.bun
+  const constructorBunId = useAppSelector(
+    (state) => state.constructorIngredients.bun
   );
-  const constructorIngredientsIds = useSelector(
-    (state: IState) => state.constructorIngredients.ingredients
+  const constructorIngredientsIds = useAppSelector(
+    (state) => state.constructorIngredients.ingredients
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   let location = useLocation();
 
   let count = useMemo(() => {

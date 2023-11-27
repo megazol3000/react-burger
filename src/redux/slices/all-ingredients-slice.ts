@@ -1,13 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NORMA_API } from "../../utils/burger-api";
-import { IIngredient } from "../../utils/types";
+import { IAllIngredients } from "../../utils/types";
 
-interface IInitialState {
-  ingredients: Array<IIngredient | undefined>;
-  error: boolean;
-}
-
-const initialState: IInitialState = {
+const initialState: IAllIngredients = {
   ingredients: [],
   error: false,
 };

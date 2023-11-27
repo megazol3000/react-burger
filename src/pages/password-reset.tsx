@@ -1,5 +1,4 @@
-import "../components/app/app.css";
-import { useState, useEffect, ChangeEvent, SyntheticEvent, FC } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
@@ -7,17 +6,14 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchResetPassword } from "../redux/slices/user-slice";
-import { useSelector } from "react-redux";
 import { setLoading } from "../redux/slices/preloader-slice";
-import { IState } from "../utils/types";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../utils/hooks/use-app-selector";
 
-const PasswordReset:FC = () => {
+const PasswordReset: FC = () => {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
-  const requestState = useSelector(
-    (state: IState) => state.user.passwordResetState
-  );
+  const requestState = useAppSelector((state) => state.user.passwordResetState);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -34,7 +30,7 @@ const PasswordReset:FC = () => {
     dispatch(setLoading(false));
   };
 
-  const submit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
     dispatch(fetchResetPassword({ password, token, hidePreloader }));

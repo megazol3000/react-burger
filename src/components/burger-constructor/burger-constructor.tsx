@@ -1,6 +1,5 @@
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import {
   addIngredient,
   addBun,
@@ -9,27 +8,27 @@ import OrderBlock from "../order-block/order-block";
 import { useDrop } from "react-dnd";
 import ConstructorDragElement from "./constructor-drag-element";
 import { FC, useMemo } from "react";
-import { IState, IIngredient } from "../../utils/types";
+import { IIngredient } from "../../utils/types";
 import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../../utils/hooks/use-app-selector";
 
 const BurgerConstructor: FC = () => {
-  const allIngredients = useSelector(
-    (state: IState) => state.allIngredients.ingredients
+  const allIngredients = useAppSelector(
+    (state) => state.allIngredients.ingredients
   );
 
-  const constructorBunId = useSelector(
-    (state: IState) => state.constructorIngredients.bun
+  const constructorBunId = useAppSelector(
+    (state) => state.constructorIngredients.bun
   );
 
-  const constructorIngredientsIds = useSelector(
-    (state: IState) => state.constructorIngredients.ingredients
+  const constructorIngredientsIds = useAppSelector(
+    (state) => state.constructorIngredients.ingredients
   );
 
   const dispatch = useAppDispatch();
 
   const bun = useMemo(
-    () =>
-      allIngredients.find((item: IIngredient) => item._id === constructorBunId),
+    () => allIngredients.find((item) => item._id === constructorBunId),
     [allIngredients, constructorBunId]
   );
 
@@ -37,7 +36,7 @@ const BurgerConstructor: FC = () => {
     accept: "ingredient",
     drop(ingredient: { id: string }) {
       const objIngredient = allIngredients.find(
-        (item: IIngredient) => item._id === ingredient.id
+        (item) => item._id === ingredient.id
       );
       if (objIngredient && objIngredient.type === "bun") {
         dispatch(addBun(ingredient));
@@ -56,12 +55,12 @@ const BurgerConstructor: FC = () => {
     if (allIngredients.length) {
       const acc: Array<IIngredient | undefined> = [];
       constructorIngredientsIds.forEach((id: string) => {
-        acc.push(allIngredients.find((item: IIngredient) => item._id === id));
+        acc.push(allIngredients.find((item) => item._id === id));
       });
       return acc;
     }
   }, [constructorIngredientsIds, allIngredients]);
-
+  
   return (
     <div className={`${styles.BurgerConstructorContainer} pt-15`}>
       <div
@@ -81,11 +80,11 @@ const BurgerConstructor: FC = () => {
         </div>
         <div className={`${styles.scrollContainer} pr-2 pl-4`}>
           {scrollIngredients &&
-            scrollIngredients.map((item: IIngredient, idx: number) => (
+            scrollIngredients.map((objItem: IIngredient, idx: number) => (
               <ConstructorDragElement
-                objItem={item}
+                objItem={objItem}
                 idx={idx}
-                key={idx + "_" + item._id}
+                key={idx + "_" + objItem._id}
               />
             ))}
         </div>

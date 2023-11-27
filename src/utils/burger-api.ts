@@ -32,7 +32,7 @@ export async function fetchWithRefresh(
   try {
     const res = await fetch(`${NORMA_API}${url}`, options);
     return await checkResponse(res)
-      .then((data: any) => {
+      .then((data) => {
         if (data) {
           setResponse(data);
         }

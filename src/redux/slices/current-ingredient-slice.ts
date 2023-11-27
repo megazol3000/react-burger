@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ICurrentIngredient } from '../../utils/types';
 
-const initialState = {
+const initialState: ICurrentIngredient = {
   modalVisible: false,
   calories: 0,
   carbohydrates: 0,

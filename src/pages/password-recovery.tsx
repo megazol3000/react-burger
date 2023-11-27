@@ -1,5 +1,4 @@
-import "../components/app/app.css";
-import { useState, useEffect, SyntheticEvent, ChangeEvent, FC } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
 import {
   Input,
   Button,
@@ -9,15 +8,14 @@ import {
   fetchPasswordRecovery,
   setPasswordResetState,
 } from "../redux/slices/user-slice";
-import { useSelector } from "react-redux";
 import { setLoading } from "../redux/slices/preloader-slice";
-import { IState } from "../utils/types";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../utils/hooks/use-app-selector";
 
-const PasswordRecovery:FC = () => {
+const PasswordRecovery: FC = () => {
   const [email, setEmail] = useState("");
-  const requestState = useSelector(
-    (state: IState) => state.user.passwordRecoveryState
+  const requestState = useAppSelector(
+    (state) => state.user.passwordRecoveryState
   );
 
   const navigate = useNavigate();
@@ -33,7 +31,7 @@ const PasswordRecovery:FC = () => {
     dispatch(setLoading(false));
   };
 
-  const submit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
     dispatch(fetchPasswordRecovery({ email, hidePreloader }));

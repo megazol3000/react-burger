@@ -1,6 +1,5 @@
-import "./app.css";
+import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
-import { useSelector } from "react-redux";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Home from "../../pages/home";
 import Login from "../../pages/login";
@@ -15,12 +14,12 @@ import { setModalVisible } from "../../redux/slices/current-ingredient-slice";
 import { FC, useEffect } from "react";
 import { fetchAllIngredients } from "../../redux/slices/all-ingredients-slice";
 import Preloader from "../../utils/preloader/preloader";
-import { IState } from "../../utils/types";
 import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../../utils/hooks/use-app-selector";
 
-const App:FC = () => {
-  const error = useSelector((state: IState) => state.allIngredients.error);
-  const loading = useSelector((state: IState) => state.preloader.loading);
+const App: FC = () => {
+  const error = useAppSelector((state) => state.allIngredients.error);
+  const loading = useAppSelector((state) => state.preloader.loading);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -33,9 +32,9 @@ const App:FC = () => {
   const cardClick = location.state && location.state.cardClick;
 
   return (
-    <div className="App">
+    <div className={styles.App}>
       {error ? (
-        <div className="errorContainer text text_type_main-large">
+        <div className={`${styles.errorContainer} text text_type_main-large`}>
           Что-то пошло не так 😨
           <br />
           попробуйте перезагрузить страницу

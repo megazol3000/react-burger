@@ -13,6 +13,15 @@ export interface IIngredient {
   __v: number;
 }
 
+export interface IAllIngredients {
+  ingredients: IIngredient[];
+  error: boolean;
+}
+
+export interface ICurrentIngredient extends IIngredient {
+  modalVisible: boolean;
+}
+
 export interface IOrder {
   name: string;
   order: {
@@ -44,7 +53,7 @@ export interface IState {
     ingredients: IIngredient[];
     error: boolean;
   };
-  currentIngredient: IIngredient;
+  currentIngredient: ICurrentIngredient;
   constructorIngredients: IConstructorIngredients;
   order: IOrder;
   user: IUser;

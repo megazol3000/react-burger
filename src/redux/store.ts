@@ -5,8 +5,9 @@ import constructorIngredientsSlice from "./slices/constructor-ingredients-slice"
 import orderSlice from "./slices/order-slice";
 import userSlice from "./slices/user-slice";
 import preloaderSlice from "./slices/preloader-slice";
+import { IState } from "../utils/types";
 
-export const store = configureStore({
+export const store = configureStore<IState>({
   reducer: {
     allIngredients: allIngredientsSlice,
     currentIngredient: currentIngredientSlice,
@@ -16,3 +17,6 @@ export const store = configureStore({
     preloader: preloaderSlice,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

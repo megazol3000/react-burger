@@ -1,31 +1,30 @@
 import styles from "./ingredient-details.module.css";
-import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setCurrentIngredient } from "../../../redux/slices/current-ingredient-slice";
 import { FC, useEffect } from "react";
 import NotFound from "../../../pages/not-found/not-found";
-import { IState, IIngredient } from "../../../utils/types";
+import { IIngredient } from "../../../utils/types";
+import { useAppDispatch } from "../../../utils/hooks/use-app-dispatch";
+import { useAppSelector } from "../../../utils/hooks/use-app-selector";
 
 const IngredientDetails: FC = () => {
   const { id } = useParams<"id">();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const allIngredients = useSelector(
-    (state: IState) => state.allIngredients.ingredients
+  const allIngredients = useAppSelector(
+    (state) => state.allIngredients.ingredients
   );
 
   let current: IIngredient | undefined;
   if (allIngredients.length) {
-    current = allIngredients.find((item: IIngredient) => item._id === id);
+    current = allIngredients.find((item) => item._id === id);
   }
 
   useEffect(() => {
     if (current) dispatch(setCurrentIngredient(current));
   }, [current]);
 
-  const currentIngredient = useSelector(
-    (state: IState) => state.currentIngredient
-  );
+  const currentIngredient = useAppSelector((state) => state.currentIngredient);
 
   return current ? (
     <div className={styles.details}>

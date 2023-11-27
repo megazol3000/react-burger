@@ -1,23 +1,21 @@
-import "../components/app/app.css";
-import { useState, useEffect, SyntheticEvent, FC } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent, FC } from "react";
 import {
   Input,
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { setLoading } from "../redux/slices/preloader-slice";
 import { fetchRegistration } from "../redux/slices/user-slice";
 import { useAppDispatch } from "../utils/hooks/use-app-dispatch";
-import { IState } from "../utils/types";
+import { useAppSelector } from "../utils/hooks/use-app-selector";
 
-const Registration:FC = () => {
+const Registration: FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const registrationState = useSelector(
-    (state: IState) => state.user.registrationState
+  const registrationState = useAppSelector(
+    (state) => state.user.registrationState
   );
 
   const navigate = useNavigate();
@@ -27,7 +25,7 @@ const Registration:FC = () => {
     dispatch(setLoading(false));
   };
 
-  const submit = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setLoading(true));
     dispatch(
@@ -55,19 +53,25 @@ const Registration:FC = () => {
           value={name}
           placeholder={"Имя"}
           extraClass="mb-6"
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
         />
         <Input
           type={"email"}
           value={email}
           placeholder={"E-mail"}
           extraClass="mb-6"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
         />
         <PasswordInput
           value={password}
           extraClass="mb-6"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setPassword(e.target.value)
+          }
         />
         <Button extraClass="mb-20" htmlType="submit">
           Зарегистрироваться
