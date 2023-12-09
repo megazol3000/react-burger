@@ -15,13 +15,55 @@ a {
 }
 
 .text_gray {
-  color: #8585AD;
+  color: #8585ad;
 }
 
 .text_light {
-  color: #F2F2F3;
+  color: #f2f2f3;
 }
 
 .text_blue {
-  color: #4C4CFF;
+  color: #4c4cff;
+}
+
+div::-webkit-scrollbar {
+  width: 8px;
+}
+
+div::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.bodyContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: calc(100vh - 88px);
+  width: 1240px;
+}
+
+.bodyContainerCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 88px);
+}
+
+.bodyContainerTop {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 120px;
+  width: 1240px;
+}
+
+.profile-nav {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
 }
