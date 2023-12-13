@@ -7,6 +7,7 @@ import Registration from "../../pages/registration";
 import PasswordRecovery from "../../pages/password-recovery";
 import PasswordReset from "../../pages/password-reset";
 import Profile from "../../pages/profile";
+import Feed from "../../pages/feed";
 import ProtectedRoute from "../protected-route/protected-route";
 import Modal from "../modal/modal";
 import IngredientDetails from "../modal/ingredient-details/ingredient-details";
@@ -83,6 +84,10 @@ const App: FC = () => {
               }
             />
             <Route path="/:id" element={<IngredientDetails />} />
+            <Route
+              path="/feed"
+              element={<ProtectedRoute element={<Feed />} anonymous={true} />}
+            />
           </Routes>
           {cardClick && (
             <Routes>

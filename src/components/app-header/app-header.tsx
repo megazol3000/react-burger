@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./app-header.module.css";
 import { FC } from "react";
 
-const AppHeader:FC = () => {
+const AppHeader: FC = () => {
   const location = useLocation();
   const profilePath = localStorage.getItem("accessToken")
     ? "/profile"
@@ -26,13 +26,15 @@ const AppHeader:FC = () => {
               <BurgerIcon type="secondary" />{" "}
               <span className="ml-2">Конструктор</span>
             </Link>
-            <a
-              className={`${styles.navItem} text text_type_main-default pt-4 pb-4 pr-5 pl-5`}
-              href="/"
+            <Link
+              className={`${styles.navItem} ${
+                location.pathname === "/feed" && styles.navItem_active
+              } text text_type_main-default pt-4 pb-4 pr-5 pl-5`}
+              to="/feed"
             >
               <ListIcon type="secondary" />{" "}
               <span className="ml-2">Лента заказов</span>
-            </a>
+            </Link>
           </li>
           <li>
             <Link to="/">
