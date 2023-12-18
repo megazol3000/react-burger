@@ -48,6 +48,10 @@ export interface IPreloader {
   loading: boolean;
 }
 
+export interface IOrderFeed {
+  isPageOpened: boolean
+}
+
 export interface IState {
   allIngredients: {
     ingredients: IIngredient[];
@@ -57,5 +61,22 @@ export interface IState {
   constructorIngredients: IConstructorIngredients;
   order: IOrder;
   user: IUser;
+  orderFeed: IOrderFeed;
   preloader: IPreloader;
+}
+
+export interface IOrderOld {
+  createdAt: string;
+  ingredients: string[];
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
+}
+export interface IOrderFeedProps {
+  success: boolean;
+  total: number;
+  totalToday: number;
+  orders: IOrderOld[]
 }

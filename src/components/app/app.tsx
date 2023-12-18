@@ -17,6 +17,7 @@ import { fetchAllIngredients } from "../../redux/slices/all-ingredients-slice";
 import Preloader from "../../utils/preloader/preloader";
 import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../../utils/hooks/use-app-selector";
+import { setOrderFeedPageOpened } from "../../redux/slices/order-feed-slice";
 
 const App: FC = () => {
   const error = useAppSelector((state) => state.allIngredients.error);
@@ -26,6 +27,8 @@ const App: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  dispatch(setOrderFeedPageOpened(location.pathname == '/feed'));
+  
   useEffect(() => {
     dispatch(fetchAllIngredients());
   }, [dispatch]);
@@ -86,7 +89,7 @@ const App: FC = () => {
             <Route path="/:id" element={<IngredientDetails />} />
             <Route
               path="/feed"
-              element={<ProtectedRoute element={<Feed />} anonymous={true} />}
+              element={<Feed />}
             />
           </Routes>
           {cardClick && (

@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import OrderDetails from "../modal/order-details/order-details";
 import { removeAllIngredients } from "../../redux/slices/constructor-ingredients-slice";
 import { fetchOrder, setModalVisible } from "../../redux/slices/order-slice";
-import { IIngredient } from "../../utils/types";
 import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../../utils/hooks/use-app-selector";
 

@@ -13,3 +13,32 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.OrderFeedCardFooter,
+.OrderFeedCardPrice,
+.OrderFeedCardIngredients {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.OrderFeedCardIngredients {
+  justify-content: start;
+}
+
+.OrderFeedCardIngredient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #801AB2;
+  background: #131316;
+  overflow: hidden;
+}
+
+.OrderFeedCardIngredient img {
+  height: 60px;
+  width: auto;
+}

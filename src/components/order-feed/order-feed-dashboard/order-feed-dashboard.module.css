@@ -1,0 +1,43 @@
+.OrderFeedContainer {
+  width: calc(50% - 20px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.OrderFeedBlock {
+  flex-grow: 1;
+  overflow: overlay;
+}
+
+.OrdersLists,
+.OrderListCompleted,
+.OrderListProcessing {
+  display: flex;
+}
+
+.OrdersLists {
+  gap: 36px;
+}
+
+.OrderListCompleted,
+.OrderListProcessing {
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.OrderListCompletedBlock,
+.OrderListProcessingBlock,
+.OrdersCompletedAllTime {
+  display: flex;
+  flex-direction: column;
+}
+
+.OrderListCompletedBlock {
+  color: #0CC;
+}
+
+.ordersCounter {
+  color: #F2F2F3;
+  text-shadow: 0px 4px 32px rgba(51, 51, 255, 0.50), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 0px 16px rgba(51, 51, 255, 0.25);
+}
