@@ -4,6 +4,7 @@ const initialState: any = {
   isPageOpened: false,
   isLoading: true,
   orders: [],
+  currentOrder: {}
 };
 
 
@@ -17,9 +18,12 @@ export const orderFeedSlice = createSlice({
     setOrders: (state, action) => {
       state.orders = action.payload;
     },
+    setCurrentOrder: (state, action) => {
+      state.currentOrder = action.payload;
+    },
   },
 });
 
-export const { setOrderFeedPageOpened, setOrders } = orderFeedSlice.actions;
+export const { setOrderFeedPageOpened, setOrders, setCurrentOrder } = orderFeedSlice.actions;
 
 export default orderFeedSlice.reducer;

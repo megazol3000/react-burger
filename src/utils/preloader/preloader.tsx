@@ -1,7 +1,7 @@
 import preloaderImage from "../../images/preloader.png";
 import styles from "./preloader.module.css";
 
-const Preloader = () => {
+export const Preloader = () => {
   return (
     <div className={styles.preloader}>
       <img src={preloaderImage} className={styles.rotating} alt="preloader" />
@@ -9,4 +9,10 @@ const Preloader = () => {
   );
 };
 
-export default Preloader;
+export const SimplePreloader = () => {
+  return (
+    <div className={styles.simplePreloader}>
+      <img src={preloaderImage} className={styles.rotating} alt="preloader" />
+    </div>
+  );
+};

@@ -7,11 +7,9 @@ const OrderFeed: FC = () => {
   const res = useGetMessagesQuery('');
 
   return (
-    <>
-      {
-        res.data && <OrderFeedTape data={res.data} />
-      }
-      <OrderFeedDashboard />
+    res.data && <>
+      <OrderFeedTape data={res.data} />
+      <OrderFeedDashboard data={res.data} />
     </>
   );
 };

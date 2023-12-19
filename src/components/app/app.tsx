@@ -11,10 +11,11 @@ import Feed from "../../pages/feed";
 import ProtectedRoute from "../protected-route/protected-route";
 import Modal from "../modal/modal";
 import IngredientDetails from "../modal/ingredient-details/ingredient-details";
+import OrderFeedDetails from "../modal/order-feed-details/order-feed-details";
 import { setModalVisible } from "../../redux/slices/current-ingredient-slice";
 import { FC, useEffect } from "react";
 import { fetchAllIngredients } from "../../redux/slices/all-ingredients-slice";
-import Preloader from "../../utils/preloader/preloader";
+import { Preloader } from "../../utils/preloader/preloader";
 import { useAppDispatch } from "../../utils/hooks/use-app-dispatch";
 import { useAppSelector } from "../../utils/hooks/use-app-selector";
 import { setOrderFeedPageOpened } from "../../redux/slices/order-feed-slice";
@@ -104,6 +105,19 @@ const App: FC = () => {
                     }}
                     title="Детали ингредиента"
                     child={<IngredientDetails />}
+                  />
+                }
+              />
+              <Route
+                path="/feed/:id"
+                element={
+                  <Modal
+                    onClose={() => {
+                      navigate("/feed");
+                      dispatch(setModalVisible(false));
+                    }}
+                    title=""
+                    child={<OrderFeedDetails />}
                   />
                 }
               />

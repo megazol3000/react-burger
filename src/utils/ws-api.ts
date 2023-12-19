@@ -22,8 +22,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
   
             ws.addEventListener('message', listener);
           } catch {
-            // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
-            // in which case `cacheDataLoaded` will throw
+            console.log('Error');
           }
           await cacheEntryRemoved
           ws.close()
